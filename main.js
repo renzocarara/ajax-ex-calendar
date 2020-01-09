@@ -1,6 +1,9 @@
-var now = moment();
-console.log("now", now);
-
+// Repo: ajax-ex-calendar
+// Creare un calendario dinamico con le festività. Partiamo dal gennaio
+// 2018 dando la possibilità di cambiare mese, gestendo il caso in cui l’API
+// non possa ritornare festività. Il calendario partirà da gennaio 2018 e si
+// concluderà a dicembre 2018 (unici dati disponibili sull’API).
+// -----------------------------------------------------------------------------
 var urlCalendar = "https://flynn.boolean.careers/exercises/api/holidays";
 var initialMoment = moment('2018-01-01'); // data inizio del calendario
 var initialMonth = initialMoment.month(); // mese di inizio del calendario
@@ -8,7 +11,7 @@ var initialMonth = initialMoment.month(); // mese di inizio del calendario
 $(document).ready(function() {
 
     displayMonth(); // visualizzo il primo mese
-    GetAndApplyHolidays(initialMonth); // applico festività
+    GetAndApplyHolidays(initialMonth); // applico le festività
 
     //intercetto click sui bottoni di navigazione
     $('.nav-button').click(function() {
@@ -44,7 +47,7 @@ function applyHolidays(holidaysList) {
 
 function GetAndApplyHolidays(month) {
     // DESCRIZIONE:
-    // chiamata AJAX
+    // chiamata AJAX per recuperare le festività
 
     $.ajax({
         url: urlCalendar,
@@ -68,18 +71,27 @@ function handleNavigation(that) {
     // DESCRIZIONE:
     // gestisce il click sui bottoni 'precedente' e 'successivo'
 
+    var currentMonth = initialMoment.month();
+
     if (that.hasClass('next')) {
         // è stato cliccato il bottone 'successivo'
         console.log("clic successivo");
-        console.log("mese corrente:", initialMoment.month());
-        // verifico se il bottone può essere cliccato
-        if (initialMoment.month() < 11) {
+        console.log("mese corrente:", currentMonth);
+        // verifico se il bottone può essere cliccato (11 corrisponde a dicembre)
+        if (currentMonth < 11) {
             // incremento il mese
             initialMoment.add(1, 'months');
             // visualizzo il nuovo mese
             displayMonth();
-            GetAndApplyHolidays(initialMoment.month());
-
+            GetAndApplyHolidays(currentMonth);
+            // abilito/disabilito a livello grafico i bottoni di navigazione
+            if (currentMonth == 10) { // mi sono spostato sull'ultimo mese)
+                // rendo visivamente disabilitato il pulsante 'successivo'
+                $('.nav-button.next').addClass('disabled');
+            } else if (currentMonth == 0) { // mi sono spostato sul secondo mese
+                // rendo visivamente abilitato il pulsante 'precedente'
+                $('.nav-button.prev').removeClass('disabled');
+            }
 
         } else {
             // eventuale messaggio d'errore
@@ -89,15 +101,22 @@ function handleNavigation(that) {
     } else {
         // è stato cliccato il bottone 'precedente'
         console.log("clic precedente");
-        console.log("mese corrente:", initialMoment.month());
-        // verifico se il bottone può essere cliccato
-        if (initialMoment.month() > 0) {
+        console.log("mese corrente:", currentMonth);
+        // verifico se il bottone può essere cliccato (0 corrisponde a gennaio)
+        if (currentMonth > 0) {
             // incremento il mese
             initialMoment.subtract(1, 'months');
             // visualizzo il nuovo mese
             displayMonth();
-            GetAndApplyHolidays(initialMoment.month());
-
+            GetAndApplyHolidays(currentMonth);
+            // abilito/disabilito a livello grafico i bottoni di navigazione
+            if (currentMonth == 1) { // mi sono spostato sul primo mese)
+                // rendo visivamente disabilitato il pulsante 'precedente'
+                $('.nav-button.prev').addClass('disabled');
+            } else if (currentMonth == 11) { // mi sono spostato sul penultimo mese
+                // rendo visivamente abilitato il pulsante 'successivo'
+                $('.nav-button.next').removeClass('disabled');
+            }
 
         } else {
             // eventuale messaggio d'errore

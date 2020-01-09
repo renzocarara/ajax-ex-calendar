@@ -23,6 +23,11 @@ main {
     align-items: center;
 }
 
+/* elimino bordo sui button quando hanno il focus */
+button:focus {
+    outline: none;
+}
+
 .nav-button {
     cursor: pointer;
     background-color: red;
@@ -35,4 +40,10 @@ main {
 .holiday {
     color: red;
     font-weight: bold;
+}
+
+.disabled {
+    cursor: default;
+    background-color: gray;
+    color: darkgray;
 }
