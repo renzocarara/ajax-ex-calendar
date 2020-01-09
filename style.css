@@ -1,0 +1,33 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f2f2f2;
+    font-family: sans-serif;
+}
+
+header {
+    padding-top: 50px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nav-button {
+    cursor: pointer;
+    background-color: red;
+    color: white;
+    font-size: 18px;
+    padding: 10px 5px;
+    width: 150px;
+}
