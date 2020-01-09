@@ -24,8 +24,23 @@ $(document).ready(function() {
 function applyHolidays(holidaysList) {
     // DESCRIZIONE: applica le festività sul mese corrente
 
-}
+    // scorro l'array delle festività restituito dall'API
+    for (var i = 0; i < holidaysList.length; i++) {
+        // estraggo data (YYYY-MM-DD) e nome della festa
+        var holidayDate = holidaysList[i].date;
+        var holidayName = holidaysList[i].name;
+        console.log("data:", holidayDate, "nome:", holidayName);
 
+        // creo un indice con il giorno contenuto nella stringa data (ultimi 2 caratteri)
+        var indexDay = holidayDate.slice(8, 10);
+        console.log("indice:", indexDay);
+
+        // accedo all'elemento della lista sulla pagina tramite indice
+        // NOTA: .eq() indicizza partendo da 0
+        console.log("indexDay-1", indexDay - 1);
+        $('.day').eq(indexDay - 1).addClass('holiday');
+    }
+}
 
 function GetAndApplyHolidays(month) {
     // DESCRIZIONE:
@@ -52,6 +67,8 @@ function GetAndApplyHolidays(month) {
 
 
 function handleNavigation(that) {
+    // DESCRIZIONE:
+    // gestisce il click sui bottoni 'precedente' e 'successivo'
 
     if (that.hasClass('next')) {
         // è stato cliccato il bottone 'successivo'

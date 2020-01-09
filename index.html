@@ -12,6 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
     <title>Boolean - class#8 - #033 - Calendario festività 2018</title>
 </head>
+
 <header>
     <h1> <span id="month-name"></span> 2018</h1>
     <div class="month-navigation">
@@ -19,6 +20,7 @@
         <button id="next-button" class="nav-button next">Successivo&nbsp;<i class="fas fa-arrow-alt-circle-right"></i></button>
     </div>
 </header>
+
 <main>
     <ul id="month-days"></ul>
 </main>
@@ -26,7 +28,7 @@
 <body>
     <script id="month-template" type="text/x-handlebars-template">
 
-        <li>{{ day }} {{ month }}</li>
+        <li class="day">{{ day }} {{ month }}</li>
 
     </script>
 
