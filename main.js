@@ -1,10 +1,14 @@
 var now = moment();
 console.log("now", now);
-var initialMoment = moment('2018-01-01'); // data inizio calendario
+
+var urlCalendar = "https://flynn.boolean.careers/exercises/api/holidays";
+var initialMoment = moment('2018-01-01'); // data inizio del calendario
+var initialMonth = initialMoment.month(); // mese di inizio del calendario
 
 $(document).ready(function() {
 
-    displayMonth();
+    displayMonth(); // visualizzo il primo mese
+    GetAndApplyHolidays(initialMonth); // applico festività
 
     //intercetto click sui bottoni di navigazione
     $('.nav-button').click(function() {
@@ -17,6 +21,36 @@ $(document).ready(function() {
 });
 
 // ---------------------------- FUNCTIONs --------------------------------------
+function applyHolidays(holidaysList) {
+    // DESCRIZIONE: applica le festività sul mese corrente
+
+}
+
+
+function GetAndApplyHolidays(month) {
+    // DESCRIZIONE:
+    // chiamata AJAX
+
+    $.ajax({
+        url: urlCalendar,
+        data: {
+            'year': initialMoment.year(),
+            'month': month
+        },
+        method: 'get',
+        success: function(data) {
+            var holidays = data.response;
+            console.log("holydays", holidays);
+            applyHolidays(data.response);
+        },
+        error: function() {
+            alert("ERRORE! C'è stato un problema nell'accesso ai dati");
+        }
+    });
+} // end function GetAndApplyHolidays()
+
+
+
 function handleNavigation(that) {
 
     if (that.hasClass('next')) {
@@ -28,6 +62,7 @@ function handleNavigation(that) {
             initialMoment.add(1, 'months');
             // visualizzo il nuovo mese
             displayMonth();
+            GetAndApplyHolidays(initialMoment.month());
         } else {
             // eventuae messaggio d'errore
         }
@@ -43,6 +78,8 @@ function handleNavigation(that) {
             initialMoment.subtract(1, 'months');
             // visualizzo il nuovo mese
             displayMonth();
+            GetAndApplyHolidays(initialMoment.month());
+
 
         } else {
             // eventuae messaggio d'errore
