@@ -35,6 +35,7 @@ button:focus {
     font-size: 18px;
     padding: 10px 5px;
     width: 150px;
+    border-style: none;
 }
 
 .holiday {

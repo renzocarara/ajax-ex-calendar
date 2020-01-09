@@ -11,7 +11,7 @@ var initialMonth = initialMoment.month(); // mese di inizio del calendario
 $(document).ready(function() {
 
     displayMonth(); // visualizzo il primo mese
-    GetAndApplyHolidays(initialMonth); // applico le festività
+    GetAndApplyHolidays(initialMonth); // applico le festività al primo mese
 
     //intercetto click sui bottoni di navigazione
     $('.nav-button').click(function() {
@@ -25,22 +25,26 @@ $(document).ready(function() {
 
 // ---------------------------- FUNCTIONs --------------------------------------
 function applyHolidays(holidaysList) {
-    // DESCRIZIONE: applica le festività sul mese corrente
+    // DESCRIZIONE:
+    // applica le festività sul mese corrente
+    // riceve in ingresso un array di oggetti che contiene le festività
+    // per quel mese (se ce ne sono)
 
     // scorro l'array delle festività restituito dall'API
     for (var i = 0; i < holidaysList.length; i++) {
-        // estraggo data (YYYY-MM-DD) e nome della festa
+        // estraggo data (YYYY-MM-DD) e nome della festività
         var holidayDate = holidaysList[i].date;
         var holidayName = holidaysList[i].name;
         console.log("data:", holidayDate, "nome:", holidayName);
 
-        // creo un indice con il giorno contenuto nella stringa data (ultimi 2 caratteri)
-        var indexDay = holidayDate.slice(8, 10);
+        // creo un indice con il numero del giorno contenuto nella stringa data (ultimi 2 caratteri)
+        var indexDay = holidayDate.slice(-2);
         console.log("indice:", indexDay);
 
-        // accedo all'elemento della lista sulla pagina tramite indice
+        // accedo all'elemento della pagina HTML tramite indice
         // NOTA: .eq() indicizza partendo da 0
         console.log("indexDay-1", indexDay - 1);
+        // aggiungo dello stile per evidenziare la festività
         $('.day').eq(indexDay - 1).addClass('holiday');
     }
 }
@@ -48,6 +52,7 @@ function applyHolidays(holidaysList) {
 function GetAndApplyHolidays(month) {
     // DESCRIZIONE:
     // chiamata AJAX per recuperare le festività
+    // poi chiama una funzione per applicare e festività sulla pagina HTML
 
     $.ajax({
         url: urlCalendar,
@@ -81,7 +86,7 @@ function handleNavigation(that) {
         if (currentMonth < 11) {
             // incremento il mese
             initialMoment.add(1, 'months');
-            // visualizzo il nuovo mese
+            // visualizzo il nuovo mese e applico le festività
             displayMonth();
             GetAndApplyHolidays(currentMonth);
             // abilito/disabilito a livello grafico i bottoni di navigazione
@@ -97,7 +102,6 @@ function handleNavigation(that) {
             // eventuale messaggio d'errore
         }
 
-
     } else {
         // è stato cliccato il bottone 'precedente'
         console.log("clic precedente");
@@ -106,7 +110,7 @@ function handleNavigation(that) {
         if (currentMonth > 0) {
             // incremento il mese
             initialMoment.subtract(1, 'months');
-            // visualizzo il nuovo mese
+            // visualizzo il nuovo mese  e applico le festività
             displayMonth();
             GetAndApplyHolidays(currentMonth);
             // abilito/disabilito a livello grafico i bottoni di navigazione
@@ -126,12 +130,14 @@ function handleNavigation(that) {
 } // end function handleNavigation()
 
 
-
 function displayMonth() {
+    // DESCRIZIONE:
+    // visualizza il mese corrente sulla pagina HTML,
+    // creando dinamicamente gli elementi, utilizza HANDLEBARS
 
     // recupero il n. di giorni di cui è composto il mese
-    var days = initialMoment.daysInMonth();
-    console.log("days", days);
+    var numberOfDays = initialMoment.daysInMonth();
+    console.log("numberOfDays", numberOfDays);
 
     // pulisco la pagina
     $('#month-days').empty();
@@ -140,8 +146,7 @@ function displayMonth() {
     $('#month-name').text(monthName);
 
     // inserisco in modo dinamico tutti i giorni di cui è composto il mese
-    for (var dayNumber = 1; dayNumber <= days; dayNumber++) {
-        // ------------------------- HANDLEBARS ------------------------------------
+    for (var dayNumber = 1; dayNumber <= numberOfDays; dayNumber++) {
         var context = {
             'day': dayNumber,
             'month': monthName
@@ -154,6 +159,5 @@ function displayMonth() {
         var monthDay = monthFunction(context);
         // aggiungo in pagina il giorno appena creato
         $('#month-days').append(monthDay);
-        // ------------------------- HANDLEBARS ------------------------------------
     }
 } // end function
