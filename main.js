@@ -64,8 +64,6 @@ function GetAndApplyHolidays(month) {
     });
 } // end function GetAndApplyHolidays()
 
-
-
 function handleNavigation(that) {
     // DESCRIZIONE:
     // gestisce il click sui bottoni 'precedente' e 'successivo'
@@ -73,24 +71,27 @@ function handleNavigation(that) {
     if (that.hasClass('next')) {
         // è stato cliccato il bottone 'successivo'
         console.log("clic successivo");
+        console.log("mese corrente:", initialMoment.month());
         // verifico se il bottone può essere cliccato
-        if (true) {
+        if (initialMoment.month() < 11) {
             // incremento il mese
             initialMoment.add(1, 'months');
             // visualizzo il nuovo mese
             displayMonth();
             GetAndApplyHolidays(initialMoment.month());
+
+
         } else {
-            // eventuae messaggio d'errore
+            // eventuale messaggio d'errore
         }
 
 
     } else {
         // è stato cliccato il bottone 'precedente'
         console.log("clic precedente");
-
+        console.log("mese corrente:", initialMoment.month());
         // verifico se il bottone può essere cliccato
-        if (true) {
+        if (initialMoment.month() > 0) {
             // incremento il mese
             initialMoment.subtract(1, 'months');
             // visualizzo il nuovo mese
@@ -99,7 +100,7 @@ function handleNavigation(that) {
 
 
         } else {
-            // eventuae messaggio d'errore
+            // eventuale messaggio d'errore
         }
     }
 
