@@ -12,9 +12,12 @@ body {
 header {
     padding-top: 50px;
     padding-bottom: 10px;
+    width: 702px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: space-between;
+    margin: auto;
+    /* flex-direction: column; */
+    /* align-items: center; */
 }
 
 main {
