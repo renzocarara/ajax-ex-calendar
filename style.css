@@ -84,7 +84,6 @@ button:disabled {
     width: 700px;
     height: 532px;
     font-size: 14px;
-    /* border-radius: 0 0 5px 5px; */
 }
 
 .cell {
@@ -96,18 +95,22 @@ button:disabled {
     flex-shrink: 0;
     width: 100px;
     height: 70px;
-    background-color: white;
+    background-color: ghostwhite;
 }
 
 .holiday {
-    color: crimson;
+    color: darkred;
     font-weight: bold;
-    background-color: #f0dbdb;
+    background-color: mistyrose;
 }
 
 .holiday-name {
     text-align: right;
-    color: darkred;
+    color: red;
     font-size: 14px;
     font-style: italic;
+}
+
+.bgc-white {
+    background-color: white;
 }

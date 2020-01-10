@@ -22,19 +22,21 @@ $(document).ready(function() {
 
     //intercetto click sui bottoni di navigazione
     $('.nav-button').click(function() {
-
         // chiamo una funzione per gestire il click
         handleNavigation($(this));
-
     }); // fine evento click su bottone
 
-    //intercetto mouseenter e mouseleave sui bottoni di navigazione
-    $('.nav-button').on('mouseenter mouseleave', function() {
-
+    //intercetto mouseenter sui bottoni di navigazione
+    $('.nav-button').mouseenter(function() {
         // cambio colore del bottone sull'hover del mouse
-        $(this).toggleClass('nav-button-hover');
+        $(this).addClass('nav-button-hover');
+    }); // fine evento mouseenter sui bottoni
 
-    }); // fine evento mouseenter/mouseleave su bottone
+    //intercetto mouseleave sui bottoni di navigazione
+    $('.nav-button').mouseleave(function() {
+        // cambio colore del bottone sull'hover del mouse
+        $(this).removeClass('nav-button-hover');
+    }); // fine evento mouseleave sui bottoni
 
 });
 
@@ -58,7 +60,8 @@ function applyHolidays(holidaysList) {
 
         // accedo all'elemento della pagina HTML tramite l'indice
         // aggiungo dello stile (sull'elemento genitore) per evidenziare la festività
-        $('.day').eq(indexDay).parent().addClass('holiday');
+        $('.day').eq(indexDay).parent().removeClass('bgc-white').addClass('holiday');
+
         // aggiungo il nome della festività
         $('.holiday-name').eq(indexDay).append(holidayName);
     }
@@ -149,7 +152,7 @@ function displayMonth() {
     var numberOfDays = initialMoment.daysInMonth();
 
     // pulisco la pagina, rimuovo i contenuti e lo stile su tutte le celle
-    $('#grid-container .cell').empty().removeClass('holiday');
+    $('#grid-container .cell').empty().removeClass('holiday bgc-white');
 
     // aggiorno il titolo del calendario con il nome del mese
     var monthName = initialMoment.format('MMMM');
@@ -182,8 +185,8 @@ function displayMonth() {
         var monthFunction = Handlebars.compile(monthTemplate);
         // chiamo la funzione generata da HANDLEBARS per popolare il template
         var monthDay = monthFunction(context);
-        // aggiungo in pagina il giorno appena creato
-        $('.cell').eq(dayNumber - 1 + offset).append(monthDay);
+        // aggiungo in pagina il giorno appena creato e applico dello stile alla cella
+        $('.cell').eq(dayNumber - 1 + offset).append(monthDay).addClass('bgc-white');
         // passo al giorno successivo
         weekdaysMoment.add(1, 'days');
     }
