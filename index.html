@@ -16,7 +16,7 @@
     </head>
 
     <header>
-        <h1> <span id="month-name"></span> 2018</h1>
+        <h1><i class="far fa-calendar-alt">&nbsp;</i><span id="month-name"></span>&nbsp;2018</h1>
         <div class="month-navigation">
             <button class="nav-button prev"><i class="fas fa-arrow-alt-circle-left"></i>&nbsp;Precedente</button>
             <button class="nav-button next">Successivo&nbsp;<i class="fas fa-arrow-alt-circle-right"></i></button>
@@ -24,8 +24,16 @@
     </header>
 
     <main>
+        <div id="weekdays-bar">
+            <span>Monday</span>
+            <span>Tuesday</span>
+            <span>Wednesday</span>
+            <span>Thursday</span>
+            <span>Friday</span>
+            <span>Saturday</span>
+            <span>Sunday</span>
+        </div>
         <div id="grid-container"></div>
-        <!-- <ul id="month-days"></ul> -->
     </main>
 
     <script id="month-template" type="text/x-handlebars-template">

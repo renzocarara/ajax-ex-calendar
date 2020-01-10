@@ -28,6 +28,14 @@ $(document).ready(function() {
 
     }); // fine evento click su bottone
 
+    //intercetto mouseenter e mouseleave sui bottoni di navigazione
+    $('.nav-button').on('mouseenter mouseleave', function() {
+
+        // cambio colore del bottone sull'hover del mouse
+        $(this).toggleClass('nav-button-hover');
+
+    }); // fine evento mouseenter/mouseleave su bottone
+
 });
 
 // ---------------------------- FUNCTIONs --------------------------------------
@@ -98,8 +106,9 @@ function handleNavigation(that) {
 
         // abilito/disabilito i bottoni di navigazione
         if (currentMonth == 11) { // mi sono spostato sull'ultimo mese)
-            // disabilito il pulsante 'successivo'
-            $(that).prop('disabled', true);
+            $(that).prop('disabled', true); // disabilito il pulsante 'successivo'
+            $(that).removeClass('nav-button-hover'); // rimuovo il colore applicato sul hover
+
         } else if (currentMonth == 1) { // mi sono spostato sul secondo mese
             // abilito il pulsante 'precedente'
             $('.nav-button.prev').prop('disabled', false);
@@ -117,8 +126,9 @@ function handleNavigation(that) {
 
         // abilito/disabilito i bottoni di navigazione
         if (currentMonth == 0) { // mi sono spostato sul primo mese)
-            // disabilito il pulsante 'precedente'
-            $(that).prop('disabled', true);
+            $(that).prop('disabled', true); // disabilito il pulsante 'precedente'
+            $(that).removeClass('nav-button-hover'); // rimuovo il colore applicato sul hover
+
         } else if (currentMonth == 10) { // mi sono spostato sul penultimo mese
             // abilito il pulsante 'successivo'
             $('.nav-button.next').prop('disabled', false);
