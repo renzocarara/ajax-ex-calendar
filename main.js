@@ -14,6 +14,9 @@ $(document).ready(function() {
     // creo la griglia per visualizzare i singoli mesi del calendario
     createGrid();
 
+    // al caricamento della pagina il bottone 'precedente' è disabilitato
+    $('.nav-button.prev').prop('disabled', true);
+
     displayMonth(); // visualizzo il primo mese
     GetAndApplyHolidays(initialMonth); // applico le festività al primo mese
 
@@ -39,25 +42,24 @@ function applyHolidays(holidaysList) {
         // estraggo data (YYYY-MM-DD) e nome della festività
         var holidayDate = holidaysList[i].date;
         var holidayName = holidaysList[i].name;
-        // console.log("data:", holidayDate, "nome:", holidayName);
 
-        // creo un indice con il numero del giorno contenuto nella stringa data (ultimi 2 caratteri)
-        var indexDay = holidayDate.slice(-2);
-        // console.log("indice:", indexDay);
+        // creo un indice per il metodo .eq(),
+        // con il numero del giorno contenuto nella data (ultimi 2 caratteri)
+        // NOTA: .eq() indicizza partendo da 0, mentre i giorni partono da 1, per cui sottraggo 1
+        var indexDay = holidayDate.slice(-2) - 1;
 
-        // accedo all'elemento della pagina HTML tramite indice
-        // NOTA: .eq() indicizza partendo da 0
-        // console.log("indexDay-1", indexDay - 1);
-        // aggiungo dello stile per evidenziare la festività
-        $('.day').eq(indexDay - 1).parent().addClass('holiday');
-        $('.holiday-name').eq(indexDay - 1).append(holidayName);
+        // accedo all'elemento della pagina HTML tramite l'indice
+        // aggiungo dello stile (sull'elemento genitore) per evidenziare la festività
+        $('.day').eq(indexDay).parent().addClass('holiday');
+        // aggiungo il nome della festività
+        $('.holiday-name').eq(indexDay).append(holidayName);
     }
 }
 
 function GetAndApplyHolidays(month) {
     // DESCRIZIONE:
-    // chiamata AJAX per recuperare le festività
-    // poi chiama una funzione per applicare e festività sulla pagina HTML
+    // fa un chiamata AJAX per recuperare le festività
+    // poi chiama una funzione per applicare le festività sulla pagina HTML
 
     $.ajax({
         url: urlCalendar,
@@ -67,8 +69,6 @@ function GetAndApplyHolidays(month) {
         },
         method: 'get',
         success: function(data) {
-            var holidays = data.response;
-            // console.log("holydays", holidays);
             applyHolidays(data.response);
         },
         error: function() {
@@ -79,65 +79,51 @@ function GetAndApplyHolidays(month) {
 
 function handleNavigation(that) {
     // DESCRIZIONE:
-    // gestisce il click sui bottoni 'precedente' e 'successivo'
-    // visualizza il nuovo mese, applica le festività e verifica se
-    // aggiornare l'aspetto dei pulsanti (disbilitarli/abilitarli)
+    // gestisce il click sui bottoni 'precedente' e 'successivo',
+    // abilita o disabilita i pulsanti se necessario,
+    // chiama le funzioni per visualizzare il nuovo mese e applicare le festività,
+    // riceve in ingresso il riferimento al bottone cliccato
 
     var currentMonth = initialMoment.month();
 
-    if (that.hasClass('next')) {
-        // è stato cliccato il bottone 'successivo'
-        console.log("clic successivo");
-        console.log("mese corrente:", currentMonth);
-        // verifico se il bottone può essere cliccato (11 corrisponde a dicembre)
-        if (currentMonth < 11) {
-            // incremento il mese
-            initialMoment.add(1, 'months');
+    if (that.hasClass('next')) { // è stato cliccato il bottone 'successivo'
 
-            // visualizzo il nuovo mese e applico le festività
-            displayMonth();
-            GetAndApplyHolidays(currentMonth + 1);
+        // incremento il mese
+        initialMoment.add(1, 'months');
+        currentMonth++;
+        // visualizzo il nuovo mese
+        displayMonth();
+        // applico le festività del mese
+        GetAndApplyHolidays(currentMonth);
 
-            // abilito/disabilito a livello grafico i bottoni di navigazione
-            if (currentMonth == 10) { // mi sono spostato sull'ultimo mese)
-                // rendo visivamente disabilitato il pulsante 'successivo'
-                $('.nav-button.next').addClass('disabled');
-            } else if (currentMonth == 0) { // mi sono spostato sul secondo mese
-                // rendo visivamente abilitato il pulsante 'precedente'
-                $('.nav-button.prev').removeClass('disabled');
-            }
-
-        } else {
-            // eventuale messaggio d'errore
+        // abilito/disabilito i bottoni di navigazione
+        if (currentMonth == 11) { // mi sono spostato sull'ultimo mese)
+            // disabilito il pulsante 'successivo'
+            $(that).prop('disabled', true);
+        } else if (currentMonth == 1) { // mi sono spostato sul secondo mese
+            // abilito il pulsante 'precedente'
+            $('.nav-button.prev').prop('disabled', false);
         }
 
-    } else {
-        // è stato cliccato il bottone 'precedente'
-        console.log("clic precedente");
-        console.log("mese corrente:", currentMonth);
-        // verifico se il bottone può essere cliccato (0 corrisponde a gennaio)
-        if (currentMonth > 0) {
-            // decremento il mese
-            initialMoment.subtract(1, 'months');
+    } else { // è stato cliccato il bottone 'precedente'
 
-            // visualizzo il nuovo mese  e applico le festività
-            displayMonth();
-            GetAndApplyHolidays(currentMonth - 1);
+        // decremento il mese
+        initialMoment.subtract(1, 'months');
+        currentMonth--;
+        // visualizzo il nuovo mese
+        displayMonth();
+        // applico le festività del mese
+        GetAndApplyHolidays(currentMonth);
 
-            // abilito/disabilito a livello grafico i bottoni di navigazione
-            if (currentMonth == 1) { // mi sono spostato sul primo mese)
-                // rendo visivamente disabilitato il pulsante 'precedente'
-                $('.nav-button.prev').addClass('disabled');
-            } else if (currentMonth == 11) { // mi sono spostato sul penultimo mese
-                // rendo visivamente abilitato il pulsante 'successivo'
-                $('.nav-button.next').removeClass('disabled');
-            }
-
-        } else {
-            // eventuale messaggio d'errore
+        // abilito/disabilito i bottoni di navigazione
+        if (currentMonth == 0) { // mi sono spostato sul primo mese)
+            // disabilito il pulsante 'precedente'
+            $(that).prop('disabled', true);
+        } else if (currentMonth == 10) { // mi sono spostato sul penultimo mese
+            // abilito il pulsante 'successivo'
+            $('.nav-button.next').prop('disabled', false);
         }
     }
-
 } // end function handleNavigation()
 
 
@@ -145,35 +131,30 @@ function displayMonth() {
     // DESCRIZIONE:
     // visualizza il mese corrente sulla pagina HTML,
     // creando dinamicamente gli elementi, utilizza HANDLEBARS
+    // stabilisce da dove iniziare a scrivere i giorni nella griglia
+    // in base ad un offset calcolato in base a qual è il giorno della settimana
+    // del primo giorno del mese
 
     // recupero il n. di giorni di cui è composto il mese
     var numberOfDays = initialMoment.daysInMonth();
-    // console.log("numberOfDays", numberOfDays);
 
     // pulisco la pagina, rimuovo i contenuti e lo stile su tutte le celle
     $('#grid-container .cell').empty().removeClass('holiday');
 
-
-    // aggiorno il nome del mese
-    monthName = initialMoment.format('MMMM');
+    // aggiorno il titolo del calendario con il nome del mese
+    var monthName = initialMoment.format('MMMM');
     $('#month-name').text(monthName);
 
-    // estraggo il giorno della settimana del primo giorno del mese
-    // va da 0 a 6 corrispondente a dom (0), lun(1), mar(2), ..., sab(6)
-    var weekdayNumber = initialMoment.day();
-    // console.log("primo giorno del mese:", weekdayNumber);
+    // estraggo il giorno della settimana del primo giorno del mese (1=lunedì .. 7=domenica)
+    var weekdayNumber = initialMoment.isoWeekday();
 
-    // offset rispetto alla 1a cella della griglia, va da 0 a 6,
+    // calcolo l'offset rispetto alla 1a cella della griglia, va da 0 a 6,
     // mi dice da che cella iniziare a visualizzare i giorni del mese
-    // calcolo l'offset in base al giorno della settimana
-    // lunedì offset=1, .... domenica offset=6
-    var offset = 6; // offset nel caso in cui il weekday è domenica
-    if (weekdayNumber > 0) { // il giorno non è domenica
-        offset = weekdayNumber - 1;
-    }
-    // console.log("offset", offset);
+    // lunedì offset=0, .... domenica offset=6
+    var offset = weekdayNumber - 1;
 
     // clono l'oggetto moment che contiene la data del mese corrente
+    // il clone mi serve per scorrere i giorni del mese
     var weekdaysMoment = initialMoment.clone();
 
     // inserisco in modo dinamico tutti i giorni di cui è composto il mese
@@ -195,13 +176,12 @@ function displayMonth() {
         $('.cell').eq(dayNumber - 1 + offset).append(monthDay);
         // passo al giorno successivo
         weekdaysMoment.add(1, 'days');
-        // console.log("weekday", weekdaysMoment.format('ddd'));
     }
-} // end function
+} // end function displayMonth()
 
 function createGrid() {
     // DESCRIZIONE:
-    // creo una griglia fissa di 7 colonne X 6 righe (42 elementi)
+    // creo una griglia fissa di 7 colonne X 6 righe (42 celle)
 
     var gridCell = '<span class="cell"></span>'; // codice HTML da ripetere in pagina
 
@@ -210,4 +190,4 @@ function createGrid() {
         // appendo, quindi aggiungo in coda, senza sovrascrivere
         $('#grid-container').append(gridCell);
     }
-}
+} // end function createGrid()

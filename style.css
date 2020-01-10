@@ -41,8 +41,8 @@ button:focus {
     border-style: none;
 }
 
-.disabled {
-    cursor: default;
+button:disabled {
+    cursor: not-allowed;
     background-color: gray;
     color: darkgray;
 }
