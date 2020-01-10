@@ -91,7 +91,7 @@ button:disabled {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border: 1px solid darkgray;
+    border: 1px solid royalblue;
     padding: 4px;
     flex-shrink: 0;
     width: 100px;
