@@ -49,7 +49,8 @@ function applyHolidays(holidaysList) {
         // NOTA: .eq() indicizza partendo da 0
         // console.log("indexDay-1", indexDay - 1);
         // aggiungo dello stile per evidenziare la festività
-        $('.day').eq(indexDay - 1).addClass('holiday');
+        $('.day').eq(indexDay - 1).parent().addClass('holiday');
+        $('.holiday-name').eq(indexDay - 1).append(holidayName);
     }
 }
 
@@ -149,8 +150,9 @@ function displayMonth() {
     var numberOfDays = initialMoment.daysInMonth();
     // console.log("numberOfDays", numberOfDays);
 
-    // pulisco la pagina
-    $('#grid-container .cell').empty();
+    // pulisco la pagina, rimuovo i contenuti e lo stile su tutte le celle
+    $('#grid-container .cell').empty().removeClass('holiday');
+
 
     // aggiorno il nome del mese
     monthName = initialMoment.format('MMMM');

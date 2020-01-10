@@ -38,11 +38,6 @@ button:focus {
     border-style: none;
 }
 
-.holiday {
-    color: red;
-    font-weight: bold;
-}
-
 .disabled {
     cursor: default;
     background-color: gray;
@@ -55,12 +50,31 @@ button:focus {
     align-content: flex-start;
     width: 702px;
     height: 532px;
+    font-size: 14px;
 }
 
 .cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     border: 1px solid darkgray;
+    padding: 4px;
     flex-shrink: 0;
     width: 100px;
     height: 70px;
     background-color: white;
+}
+
+.holiday {
+    color: red;
+    font-weight: bold;
+    background-color: #f0dbdb;
+}
+
+.holiday-name {
+    text-align: right;
+    color: #750202;
+    /* align-self: flex-end; */
+    font-size: 14px;
+    font-style: italic;
 }
